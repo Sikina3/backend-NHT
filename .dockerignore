@@ -1,0 +1,12 @@
+﻿.gradle
+build
+out
+bin
+*.iml
+*.log
+.idea
+.vscode
+.git
+.gitignore
+Dockerfile
+**/node_modules
