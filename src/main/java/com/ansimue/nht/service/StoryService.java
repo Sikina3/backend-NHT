@@ -28,6 +28,7 @@ public class StoryService {
         story.setTitre(storyDTO.getTitre());
         story.setDescription(storyDTO.getDescription());
         story.setCategories(storyDTO.getCategories());
+        story.setPrixCoins(storyDTO.getPrixCoins() != null ? storyDTO.getPrixCoins() : 0);
 
         if (storyDTO.getAuteurId() != null) {
             story.setAuteur(writterRepository.findById(storyDTO.getAuteurId()).orElse(null));
@@ -55,6 +56,7 @@ public class StoryService {
         story.setTitre(storyDTO.getTitre());
         story.setDescription(storyDTO.getDescription());
         story.setCategories(storyDTO.getCategories());
+        story.setPrixCoins(storyDTO.getPrixCoins());
 
         if (storyDTO.getAuteurId() != null) {
             story.setAuteur(writterRepository.findById(storyDTO.getAuteurId()).orElse(null));

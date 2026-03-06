@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/history")
+@CrossOrigin(origins = "*")
 public class HistoryController {
 
     @Autowired

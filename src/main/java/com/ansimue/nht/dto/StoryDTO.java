@@ -7,6 +7,7 @@ public class StoryDTO {
     private String description;
     private Category categories;
     private Long auteurId;
+    private Integer prixCoins;
 
     // Getters and Setters
     public String getTitre() {
@@ -39,5 +40,13 @@ public class StoryDTO {
 
     public void setAuteurId(Long auteurId) {
         this.auteurId = auteurId;
+    }
+
+    public Integer getPrixCoins() {
+        return prixCoins;
+    }
+
+    public void setPrixCoins(Integer prixCoins) {
+        this.prixCoins = prixCoins;
     }
 }

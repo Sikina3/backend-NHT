@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/reactions")
+@CrossOrigin(origins = "*")
 public class ReactionController {
 
     @Autowired

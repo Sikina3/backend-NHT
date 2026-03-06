@@ -57,13 +57,13 @@ public class DemandeRechargeService {
             throw new RuntimeException("Demande already processed");
         }
 
-        demande.setStatut(StatutRecharge.APPROUVEE);
+        demande.setStatut(StatutRecharge.VALIDE);
 
         // Create transaction to add coins
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setUserId(demande.getUtilisateur().getId());
         transactionDTO.setMontantCoins(demande.getCoinsDemandes());
-        transactionDTO.setType(TransactionType.RECHARGE);
+        transactionDTO.setType(TransactionType.RECHARGE_COINS);
         transactionService.createTransaction(transactionDTO);
 
         return demandeRechargeRepository.save(demande);
@@ -72,7 +72,7 @@ public class DemandeRechargeService {
     public DemandeRecharge rejectDemande(Long demandeId) {
         DemandeRecharge demande = demandeRechargeRepository.findById(demandeId)
                 .orElseThrow(() -> new RuntimeException("Demande not found"));
-        demande.setStatut(StatutRecharge.REJETEE);
+        demande.setStatut(StatutRecharge.REJETE);
         return demandeRechargeRepository.save(demande);
     }
 

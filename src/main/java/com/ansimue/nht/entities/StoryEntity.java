@@ -24,6 +24,8 @@ public class StoryEntity {
     @Enumerated(EnumType.STRING)
     private Category categories;
 
+    private Integer prixCoins = 0;
+
     @ManyToOne
     @JoinColumn(name = "ecrivain_id")
     private WritterEntity auteur;
@@ -72,6 +74,14 @@ public class StoryEntity {
 
     public void setCategories(Category categories) {
         this.categories = categories;
+    }
+
+    public Integer getPrixCoins() {
+        return prixCoins;
+    }
+
+    public void setPrixCoins(Integer prixCoins) {
+        this.prixCoins = prixCoins;
     }
 
     public WritterEntity getAuteur() {

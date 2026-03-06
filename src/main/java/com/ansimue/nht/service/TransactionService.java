@@ -32,7 +32,8 @@ public class TransactionService {
         transaction.setType(transactionDTO.getType());
 
         // Update user balance
-        if (transactionDTO.getType() == TransactionType.RECHARGE || transactionDTO.getType() == TransactionType.GAIN) {
+        if (transactionDTO.getType() == TransactionType.RECHARGE_COINS
+                || transactionDTO.getType() == TransactionType.BONUS) {
             user.setSoldeCoins(user.getSoldeCoins() + transactionDTO.getMontantCoins());
         } else {
             if (user.getSoldeCoins() < Math.abs(transactionDTO.getMontantCoins())) {

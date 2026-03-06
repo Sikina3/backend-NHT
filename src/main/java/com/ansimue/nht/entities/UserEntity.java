@@ -35,6 +35,10 @@ public class UserEntity {
     @JoinTable(name = "achat", joinColumns = @JoinColumn(name = "lecteur_id"), inverseJoinColumns = @JoinColumn(name = "histoire_id"))
     private Set<StoryEntity> histoires = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "achat_chapitres", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "chapter_id"))
+    private Set<ChapterEntity> purchasedChapters = new HashSet<>();
+
     private Integer soldeCoins = 0;
 
     public UserEntity() {
@@ -102,5 +106,13 @@ public class UserEntity {
 
     public void setHistoires(Set<StoryEntity> histoires) {
         this.histoires = histoires;
+    }
+
+    public Set<ChapterEntity> getPurchasedChapters() {
+        return purchasedChapters;
+    }
+
+    public void setPurchasedChapters(Set<ChapterEntity> purchasedChapters) {
+        this.purchasedChapters = purchasedChapters;
     }
 }
