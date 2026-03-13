@@ -77,7 +77,7 @@ public class UserService {
         // We check if it already exists to be safe
         entityManager.createNativeQuery(
                 "INSERT INTO ecrivains (id, biographie) VALUES (:id, :bio) " +
-                        "ON DUPLICATE KEY UPDATE biographie = :bio")
+                        "ON CONFLICT (id) DO UPDATE SET biographie = EXCLUDED.biographie")
                 .setParameter("id", userId)
                 .setParameter("bio", biographie != null ? biographie : "")
                 .executeUpdate();
