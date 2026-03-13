@@ -13,4 +13,6 @@ public interface StoryRepository extends JpaRepository<StoryEntity, Long> {
     List<StoryEntity> findByTitreContainingIgnoreCase(String titre);
 
     List<StoryEntity> findByCategories(Category category);
+
+    int countByAuteur(com.ansimue.nht.entities.WritterEntity auteur);
 }

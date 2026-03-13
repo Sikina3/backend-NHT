@@ -14,4 +14,6 @@ public interface HistoryRepository extends JpaRepository<HistoryEntity, Long> {
     List<HistoryEntity> findByUtilisateurOrderByDateConsultationDesc(UserEntity utilisateur);
 
     Optional<HistoryEntity> findByUtilisateurAndHistoire(UserEntity utilisateur, StoryEntity histoire);
+
+    int countByUtilisateur(UserEntity utilisateur);
 }

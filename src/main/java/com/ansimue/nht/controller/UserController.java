@@ -55,4 +55,11 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.status(404).body("Utilisateur avec l'ID " + id
                         + " non trouvé. Vérifiez que l'ID est correct dans la base de données."));
     }
+
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<?> getUserStats(@PathVariable Long id) {
+        return userService.getUserStats(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

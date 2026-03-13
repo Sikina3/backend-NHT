@@ -41,6 +41,15 @@ public class UserEntity {
 
     private Integer soldeCoins = 0;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private Set<UserEntity> following = new HashSet<>();
+
+    @ManyToMany(mappedBy = "following", fetch = FetchType.LAZY)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private Set<UserEntity> followers = new HashSet<>();
+
     public UserEntity() {
     }
 
@@ -114,5 +123,21 @@ public class UserEntity {
 
     public void setPurchasedChapters(Set<ChapterEntity> purchasedChapters) {
         this.purchasedChapters = purchasedChapters;
+    }
+
+    public Set<UserEntity> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<UserEntity> following) {
+        this.following = following;
+    }
+
+    public Set<UserEntity> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<UserEntity> followers) {
+        this.followers = followers;
     }
 }

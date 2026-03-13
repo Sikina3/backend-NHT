@@ -12,18 +12,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import com.ansimue.nht.repository.StoryRepository;
+import com.ansimue.nht.repository.HistoryRepository;
+import com.ansimue.nht.dto.UserStatsDTO;
+
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final WritterRepository writtersRepository;
+    private final StoryRepository storyRepository;
+    private final HistoryRepository historyRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public UserService(UserRepository userRepository, WritterRepository writtersRepository) {
+    public UserService(UserRepository userRepository, WritterRepository writtersRepository,
+            StoryRepository storyRepository, HistoryRepository historyRepository) {
         this.userRepository = userRepository;
         this.writtersRepository = writtersRepository;
+        this.storyRepository = storyRepository;
+        this.historyRepository = historyRepository;
     }
 
     public List<UserEntity> getAllUsers() {
@@ -86,5 +95,23 @@ public class UserService {
         entityManager.flush();
         entityManager.clear();
         return userRepository.findById(userId);
+    }
+
+    public Optional<UserStatsDTO> getUserStats(Long userId) {
+        return userRepository.findById(userId).map(user -> {
+            int storiesCount = 0;
+            if (user.getRole() == Role.ecrivain) {
+                // To fetch safely without mapping issues, find WritterEntity or cast
+                Optional<WritterEntity> writter = writtersRepository.findById(userId);
+                if (writter.isPresent()) {
+                    storiesCount = storyRepository.countByAuteur(writter.get());
+                }
+            }
+            int totalReads = historyRepository.countByUtilisateur(user);
+            int followers = user.getFollowers() != null ? user.getFollowers().size() : 0;
+            int following = user.getFollowing() != null ? user.getFollowing().size() : 0;
+
+            return new UserStatsDTO(storiesCount, totalReads, followers, following);
+        });
     }
 }
