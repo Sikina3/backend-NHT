@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import com.ansimue.nht.entities.StoryEntity;
 
 import com.ansimue.nht.repository.StoryRepository;
 import com.ansimue.nht.repository.HistoryRepository;
@@ -100,18 +101,29 @@ public class UserService {
     public Optional<UserStatsDTO> getUserStats(Long userId) {
         return userRepository.findById(userId).map(user -> {
             int storiesCount = 0;
+            long lecturesCount = 0;
+
             if (user.getRole() == Role.ecrivain) {
-                // To fetch safely without mapping issues, find WritterEntity or cast
-                Optional<WritterEntity> writter = writtersRepository.findById(userId);
-                if (writter.isPresent()) {
-                    storiesCount = storyRepository.countByAuteur(writter.get());
+                Optional<WritterEntity> writterOpt = writtersRepository.findById(userId);
+                if (writterOpt.isPresent()) {
+                    WritterEntity writter = writterOpt.get();
+                    List<StoryEntity> stories = writter.getHistory(); // Note: field is histoires, getter is getHistory
+                    storiesCount = (stories != null) ? stories.size() : 0;
+                    if (stories != null) {
+                        lecturesCount = stories.stream()
+                                .mapToLong(s -> s.getVues() != null ? s.getVues() : 0)
+                                .sum();
+                    }
                 }
+            } else {
+                // Pour un lecteur, lectures = nombre d'histoires qu'il a lues
+                lecturesCount = historyRepository.countByUtilisateur(user);
             }
-            int totalReads = historyRepository.countByUtilisateur(user);
+
             int followers = user.getFollowers() != null ? user.getFollowers().size() : 0;
             int following = user.getFollowing() != null ? user.getFollowing().size() : 0;
 
-            return new UserStatsDTO(storiesCount, totalReads, followers, following);
+            return new UserStatsDTO(storiesCount, (int) lecturesCount, followers, following);
         });
     }
 

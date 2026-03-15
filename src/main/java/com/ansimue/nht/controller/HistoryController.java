@@ -26,6 +26,11 @@ public class HistoryController {
         return ResponseEntity.ok(historyService.getUserHistory(userId));
     }
 
+    @GetMapping("/user/{userId}/week")
+    public ResponseEntity<List<HistoryEntity>> getUserHistoryThisWeek(@PathVariable Long userId) {
+        return ResponseEntity.ok(historyService.getUserHistoryThisWeek(userId));
+    }
+
     @DeleteMapping("/clear/{userId}")
     public ResponseEntity<Void> clearHistory(@PathVariable Long userId) {
         historyService.clearHistory(userId);

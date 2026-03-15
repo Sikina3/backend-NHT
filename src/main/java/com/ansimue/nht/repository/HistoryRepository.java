@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface HistoryRepository extends JpaRepository<HistoryEntity, Long> {
     List<HistoryEntity> findByUtilisateurOrderByDateConsultationDesc(UserEntity utilisateur);
 
+    List<HistoryEntity> findByUtilisateurAndDateConsultationAfterOrderByDateConsultationDesc(UserEntity utilisateur,
+            java.time.LocalDateTime date);
+
     Optional<HistoryEntity> findByUtilisateurAndHistoire(UserEntity utilisateur, StoryEntity histoire);
 
     int countByUtilisateur(UserEntity utilisateur);

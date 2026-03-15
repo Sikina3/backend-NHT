@@ -15,41 +15,49 @@ import java.util.List;
 @Service
 public class HistoryService {
 
-    @Autowired
-    private HistoryRepository historyRepository;
+        @Autowired
+        private HistoryRepository historyRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    @Autowired
-    private StoryRepository storyRepository;
+        @Autowired
+        private StoryRepository storyRepository;
 
-    public HistoryEntity addToHistory(Long userId, Long storyId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        StoryEntity story = storyRepository.findById(storyId)
-                .orElseThrow(() -> new RuntimeException("Story not found"));
+        public HistoryEntity addToHistory(Long userId, Long storyId) {
+                UserEntity user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                StoryEntity story = storyRepository.findById(storyId)
+                                .orElseThrow(() -> new RuntimeException("Story not found"));
 
-        HistoryEntity history = historyRepository.findByUtilisateurAndHistoire(user, story)
-                .orElse(new HistoryEntity());
+                HistoryEntity history = historyRepository.findByUtilisateurAndHistoire(user, story)
+                                .orElse(new HistoryEntity());
 
-        history.setUtilisateur(user);
-        history.setHistoire(story);
-        history.setDateConsultation(LocalDateTime.now());
+                history.setUtilisateur(user);
+                history.setHistoire(story);
+                history.setDateConsultation(LocalDateTime.now());
 
-        return historyRepository.save(history);
-    }
+                return historyRepository.save(history);
+        }
 
-    public List<HistoryEntity> getUserHistory(Long userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return historyRepository.findByUtilisateurOrderByDateConsultationDesc(user);
-    }
+        public List<HistoryEntity> getUserHistory(Long userId) {
+                UserEntity user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                return historyRepository.findByUtilisateurOrderByDateConsultationDesc(user);
+        }
 
-    public void clearHistory(Long userId) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<HistoryEntity> history = historyRepository.findByUtilisateurOrderByDateConsultationDesc(user);
-        historyRepository.deleteAll(history);
-    }
+        public List<HistoryEntity> getUserHistoryThisWeek(Long userId) {
+                UserEntity user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                LocalDateTime lastWeek = LocalDateTime.now().minusDays(7);
+                return historyRepository.findByUtilisateurAndDateConsultationAfterOrderByDateConsultationDesc(user,
+                                lastWeek);
+        }
+
+        public void clearHistory(Long userId) {
+                UserEntity user = userRepository.findById(userId)
+                                .orElseThrow(() -> new RuntimeException("User not found"));
+                List<HistoryEntity> history = historyRepository.findByUtilisateurOrderByDateConsultationDesc(user);
+                historyRepository.deleteAll(history);
+        }
 }
