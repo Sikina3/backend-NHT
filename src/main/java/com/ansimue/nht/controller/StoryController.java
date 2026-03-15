@@ -62,4 +62,16 @@ public class StoryController {
             @PathVariable com.ansimue.nht.model.Category category) {
         return ResponseEntity.ok(storyService.getStoriesByCategory(category));
     }
+
+    @PostMapping("/{id}/view")
+    public ResponseEntity<Void> incrementVues(@PathVariable Long id) {
+        storyService.incrementVues(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> incrementLikes(@PathVariable Long id) {
+        storyService.incrementLikes(id);
+        return ResponseEntity.ok().build();
+    }
 }

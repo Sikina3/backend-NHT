@@ -62,4 +62,32 @@ public class UserController {
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/{followerId}/follow/{followedId}")
+    public ResponseEntity<?> followUser(@PathVariable Long followerId, @PathVariable Long followedId) {
+        try {
+            userService.followUser(followerId, followedId);
+            return ResponseEntity.ok(Map.of("message", "Abonné avec succès", "following", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Impossible de s'abonner", "error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/{followerId}/unfollow/{followedId}")
+    public ResponseEntity<?> unfollowUser(@PathVariable Long followerId, @PathVariable Long followedId) {
+        try {
+            userService.unfollowUser(followerId, followedId);
+            return ResponseEntity.ok(Map.of("message", "Désabonné avec succès", "following", false));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "Impossible de se désabonner", "error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{followerId}/is-following/{followedId}")
+    public ResponseEntity<?> isFollowing(@PathVariable Long followerId, @PathVariable Long followedId) {
+        boolean following = userService.isFollowing(followerId, followedId);
+        return ResponseEntity.ok(Map.of("following", following));
+    }
 }

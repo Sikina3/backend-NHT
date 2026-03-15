@@ -26,6 +26,10 @@ public class StoryEntity {
 
     private Integer prixCoins = 0;
 
+    private Integer vues = 0;
+
+    private Integer likes = 0;
+
     @ManyToOne
     @JoinColumn(name = "ecrivain_id")
     private WritterEntity auteur;
@@ -106,5 +110,21 @@ public class StoryEntity {
 
     public void setLecteurs(Set<UserEntity> lecteurs) {
         this.lecteurs = lecteurs;
+    }
+
+    public Integer getVues() {
+        return vues;
+    }
+
+    public void setVues(Integer vues) {
+        this.vues = vues;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 }

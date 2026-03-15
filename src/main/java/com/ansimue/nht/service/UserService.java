@@ -114,4 +114,33 @@ public class UserService {
             return new UserStatsDTO(storiesCount, totalReads, followers, following);
         });
     }
+
+    @Transactional
+    public void followUser(Long followerId, Long followedId) {
+        if (followerId.equals(followedId))
+            return;
+        entityManager.createNativeQuery(
+                "INSERT INTO user_follows (follower_id, followed_id) VALUES (:followerId, :followedId) ON CONFLICT DO NOTHING")
+                .setParameter("followerId", followerId)
+                .setParameter("followedId", followedId)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public void unfollowUser(Long followerId, Long followedId) {
+        entityManager.createNativeQuery(
+                "DELETE FROM user_follows WHERE follower_id = :followerId AND followed_id = :followedId")
+                .setParameter("followerId", followerId)
+                .setParameter("followedId", followedId)
+                .executeUpdate();
+    }
+
+    public boolean isFollowing(Long followerId, Long followedId) {
+        Number count = (Number) entityManager.createNativeQuery(
+                "SELECT COUNT(*) FROM user_follows WHERE follower_id = :followerId AND followed_id = :followedId")
+                .setParameter("followerId", followerId)
+                .setParameter("followedId", followedId)
+                .getSingleResult();
+        return count.intValue() > 0;
+    }
 }

@@ -81,4 +81,18 @@ public class StoryService {
     public List<StoryEntity> getStoriesByCategory(com.ansimue.nht.model.Category category) {
         return storyRepository.findByCategories(category);
     }
+
+    public void incrementVues(Long id) {
+        storyRepository.findById(id).ifPresent(story -> {
+            story.setVues((story.getVues() == null ? 0 : story.getVues()) + 1);
+            storyRepository.save(story);
+        });
+    }
+
+    public void incrementLikes(Long id) {
+        storyRepository.findById(id).ifPresent(story -> {
+            story.setLikes((story.getLikes() == null ? 0 : story.getLikes()) + 1);
+            storyRepository.save(story);
+        });
+    }
 }
