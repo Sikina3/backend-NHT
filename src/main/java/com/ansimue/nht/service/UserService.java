@@ -41,6 +41,15 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
+        if (user.getMotDePasse() == null || user.getMotDePasse().length() < 6) {
+            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 6 caractères.");
+        }
+
+        if (user.getNumTel() == null || !isValidMalagasyPhone(user.getNumTel())) {
+            throw new IllegalArgumentException(
+                    "Numéro de téléphone invalide. Utilisez 032/33/34/37/38 (10 chiffres) ou le format +261.");
+        }
+
         if (user.getRole() == com.ansimue.nht.model.Role.ecrivain) {
             com.ansimue.nht.entities.WritterEntity writter = new com.ansimue.nht.entities.WritterEntity();
             writter.setNom(user.getNom());
@@ -53,6 +62,14 @@ public class UserService {
         }
         user.setSoldeCoins(0);
         return userRepository.save(user);
+    }
+
+    private boolean isValidMalagasyPhone(String phone) {
+        String clean = phone.replaceAll("\\s+", "");
+        // 03[23478]xxxxxxx (10 chiffres)
+        // OU +261(0)3[23478]xxxxxxx (12 ou 13 caractères)
+        return clean.matches("^03[23478]\\d{7}$") ||
+                clean.matches("^\\+261(0)?3[23478]\\d{7}$");
     }
 
     public Optional<UserEntity> login(String numTel, String motDePasse) {
