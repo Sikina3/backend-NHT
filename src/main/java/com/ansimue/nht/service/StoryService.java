@@ -2,6 +2,7 @@ package com.ansimue.nht.service;
 
 import com.ansimue.nht.dto.StoryDTO;
 import com.ansimue.nht.entities.StoryEntity;
+import com.ansimue.nht.model.StoryStatus;
 import com.ansimue.nht.repository.StoryRepository;
 import com.ansimue.nht.repository.WritterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,13 @@ public class StoryService {
             story.setPhotoCouverture(fileName);
         }
 
+        return storyRepository.save(story);
+    }
+
+    public StoryEntity updateStoryStatus(Long id, StoryStatus statut) {
+        StoryEntity story = storyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Story not found with id: " + id));
+        story.setStatut(statut);
         return storyRepository.save(story);
     }
 

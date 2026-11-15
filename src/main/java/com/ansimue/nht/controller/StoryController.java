@@ -46,6 +46,17 @@ public class StoryController {
         return ResponseEntity.ok(storyService.updateStory(id, storyDTO, image));
     }
 
+    /** Updates only the completion status without requiring story fields or a cover upload. */
+    @PatchMapping(value = "/{id}/status", consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<StoryEntity> updateStoryStatus(
+            @PathVariable Long id,
+            @RequestBody StoryDTO storyDTO) {
+        if (storyDTO.getStatut() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(storyService.updateStoryStatus(id, storyDTO.getStatut()));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStory(@PathVariable Long id) {
         storyService.deleteStory(id);
