@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ansimue.nht.model.Category;
+import com.ansimue.nht.model.StoryStatus;
 
 import jakarta.persistence.*;
 
@@ -23,6 +24,9 @@ public class StoryEntity {
 
     @Enumerated(EnumType.STRING)
     private Category categories;
+
+    @Enumerated(EnumType.STRING)
+    private StoryStatus statut = StoryStatus.en_cours;
 
     private Integer prixCoins = 0;
 
@@ -80,6 +84,13 @@ public class StoryEntity {
         this.categories = categories;
     }
 
+    public StoryStatus getStatut() {
+        return statut == null ? StoryStatus.en_cours : statut;
+    }
+
+    public void setStatut(StoryStatus statut) {
+        this.statut = statut;
+    }
     public Integer getPrixCoins() {
         return prixCoins;
     }

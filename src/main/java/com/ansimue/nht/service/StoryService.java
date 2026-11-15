@@ -58,6 +58,10 @@ public class StoryService {
         story.setCategories(storyDTO.getCategories());
         story.setPrixCoins(storyDTO.getPrixCoins());
 
+        if (storyDTO.getStatut() != null) {
+            story.setStatut(storyDTO.getStatut());
+        }
+
         if (storyDTO.getAuteurId() != null) {
             story.setAuteur(writterRepository.findById(storyDTO.getAuteurId()).orElse(null));
         }

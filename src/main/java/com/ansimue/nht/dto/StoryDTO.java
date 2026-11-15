@@ -1,6 +1,7 @@
 package com.ansimue.nht.dto;
 
 import com.ansimue.nht.model.Category;
+import com.ansimue.nht.model.StoryStatus;
 
 public class StoryDTO {
     private String titre;
@@ -8,6 +9,11 @@ public class StoryDTO {
     private Category categories;
     private Long auteurId;
     private Integer prixCoins;
+    private StoryStatus statut;
+
+    public StoryStatus getStatut() { return statut; }
+
+    public void setStatut(StoryStatus statut) { this.statut = statut; }
 
     // Getters and Setters
     public String getTitre() {
